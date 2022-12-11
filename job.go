@@ -1,6 +1,9 @@
 package midjourney
 
-import "fmt"
+import (
+	"fmt"
+	"regexp"
+)
 
 type JobType string
 
@@ -74,4 +77,16 @@ func (j *Job) DiscordURL() string {
 
 func (j *Job) MainImageURL() string {
 	return fmt.Sprintf("https://mj-gallery.com/%s/grid_0.png", j.ID)
+}
+
+var imageFilenameRegexp = regexp.MustCompile(`[^a-zA-Z0-9\._]+`)
+
+func (j *Job) ImageFilename() string {
+	s := fmt.Sprintf("%s_%s", j.Username, j.Prompt)
+	s = imageFilenameRegexp.ReplaceAllString(s, "_")
+	if len(s) > 63 {
+		s = s[:63]
+	}
+
+	return fmt.Sprintf("%s_%s.png", s, j.ID)
 }

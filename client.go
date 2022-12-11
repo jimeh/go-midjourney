@@ -22,7 +22,7 @@ var (
 		Path:   "/api/",
 	}
 
-	DefaultUserAgent = "go-midjourney/0.0.1" // x-release-please-version
+	DefaultUserAgent = "go-midjourney/0.1.0" // x-release-please-version
 )
 
 type Client struct {

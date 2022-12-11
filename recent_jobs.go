@@ -33,6 +33,7 @@ type RecentJobsQuery struct {
 	JobStatus         JobStatus
 	UserID            string
 	UserIDLiked       string
+	CollectionID      string
 	FromDate          time.Time
 	Page              int
 	Prompt            string
@@ -63,6 +64,9 @@ func (rjq *RecentJobsQuery) URLValues() url.Values {
 	}
 	if rjq.UserIDLiked != "" {
 		v.Set("userIdLiked", rjq.UserIDLiked)
+	}
+	if rjq.CollectionID != "" {
+		v.Set("collectionID", rjq.CollectionID)
 	}
 	if !rjq.FromDate.IsZero() {
 		v.Set("fromDate", rjq.FromDate.Format(FromDateFormat))
@@ -181,5 +185,23 @@ func (c *Client) Bookmarks(
 		JobStatus:   JobStatusCompleted,
 		UserIDLiked: userID,
 		Dedupe:      true,
+	})
+}
+
+func (c *Client) CollectionFeed(
+	ctx context.Context,
+	collectionID string,
+) (*RecentJobs, error) {
+	if collectionID == "" {
+		return nil, ErrCollectionIDRequired
+	}
+
+	return c.RecentJobs(ctx, &RecentJobsQuery{
+		Amount:       50,
+		JobType:      JobTypeNull,
+		OrderBy:      OrderNew,
+		JobStatus:    JobStatusCompleted,
+		CollectionID: collectionID,
+		Dedupe:       true,
 	})
 }

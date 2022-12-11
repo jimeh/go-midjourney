@@ -19,6 +19,7 @@ var (
 	ErrInvalidAuthToken  = fmt.Errorf("%w: invalid auth token", Err)
 	ErrInvalidAPIURL     = fmt.Errorf("%w: invalid API URL", Err)
 	ErrInvalidHTTPClient = fmt.Errorf("%w: invalid HTTP client", Err)
+	ErrNotFound          = fmt.Errorf("%w: not found", Err)
 	ErrResponse          = fmt.Errorf("%w: response", Err)
 	ErrResponseStatus    = fmt.Errorf("%w: response status", ErrResponse)
 

@@ -26,18 +26,19 @@ const (
 )
 
 type RecentJobsQuery struct {
-	Amount      int
-	JobType     JobType
-	OrderBy     Order
-	JobStatus   JobStatus
-	UserID      string
-	UserIDLiked string
-	FromDate    time.Time
-	Page        int
-	Prompt      string
-	Personal    bool
-	Dedupe      bool
-	RefreshAPI  int
+	Amount            int
+	JobType           JobType
+	OrderBy           Order
+	UserIDRankedScore RankedScores
+	JobStatus         JobStatus
+	UserID            string
+	UserIDLiked       string
+	FromDate          time.Time
+	Page              int
+	Prompt            string
+	Personal          bool
+	Dedupe            bool
+	RefreshAPI        int
 }
 
 func (rjq *RecentJobsQuery) URLValues() url.Values {
@@ -50,6 +51,9 @@ func (rjq *RecentJobsQuery) URLValues() url.Values {
 	}
 	if rjq.OrderBy != "" {
 		v.Set("orderBy", string(rjq.OrderBy))
+	}
+	if len(rjq.UserIDRankedScore) > 0 {
+		v.Set("user_id_ranked_score", rjq.UserIDRankedScore.URIParam())
 	}
 	if rjq.JobStatus != "" {
 		v.Set("jobStatus", string(rjq.JobStatus))

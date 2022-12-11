@@ -73,6 +73,20 @@ func (j *Job) MainImageURL() string {
 	return fmt.Sprintf("https://mj-gallery.com/%s/grid_0.png", j.ID)
 }
 
+type ThumbnailSize int
+
+const (
+	ThumbnailSizeSmall  ThumbnailSize = 128
+	ThumbnailSizeMedium ThumbnailSize = 384
+	ThumbnailSizeLarge  ThumbnailSize = 640
+)
+
+func (j *Job) ThumbnailURL(size ThumbnailSize) string {
+	return fmt.Sprintf(
+		"https://cdn.midjourney.com/%s/grid_0_%d_N.webp", j.ID, size,
+	)
+}
+
 var imageFilenameRegexp = regexp.MustCompile(`[^a-zA-Z0-9\._]+`)
 
 func (j *Job) ImageFilename() string {

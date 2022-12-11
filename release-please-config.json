@@ -5,7 +5,6 @@
   "packages": {
     ".": {
       "changelog-path": "CHANGELOG.md",
-      "release-as": "0.0.1",
       "draft": false,
       "prerelease": false,
       "extra-files": []

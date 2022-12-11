@@ -3,10 +3,8 @@ package midjourney
 import (
 	"context"
 	"crypto/rand"
-	"encoding/json"
 	"fmt"
 	"math/big"
-	"net/http"
 	"net/url"
 	"strconv"
 )
@@ -30,19 +28,19 @@ type WordsQuery struct {
 	RandomSeed bool
 }
 
-func (rjq *WordsQuery) Values() url.Values {
+func (wq *WordsQuery) URLValues() url.Values {
 	v := url.Values{}
-	if rjq.Query != "" {
-		v.Set("query", rjq.Query)
+	if wq.Query != "" {
+		v.Set("query", wq.Query)
 	}
-	if rjq.Amount != 0 {
-		v.Set("amount", strconv.Itoa(rjq.Amount))
+	if wq.Amount != 0 {
+		v.Set("amount", strconv.Itoa(wq.Amount))
 	}
-	v.Set("page", strconv.Itoa(rjq.Page))
-	if rjq.RandomSeed {
+	v.Set("page", strconv.Itoa(wq.Page))
+	if wq.RandomSeed {
 		v.Set("seed", strconv.Itoa(randInt(9999)))
-	} else if rjq.Seed != 0 {
-		v.Set("seed", strconv.Itoa(rjq.Seed))
+	} else if wq.Seed != 0 {
+		v.Set("seed", strconv.Itoa(wq.Seed))
 	}
 
 	return v
@@ -62,28 +60,8 @@ func randInt(max int) int {
 }
 
 func (c *Client) Words(ctx context.Context, q *WordsQuery) ([]*Word, error) {
-	u := &url.URL{
-		Path:     "app/words/",
-		RawQuery: q.Values().Encode(),
-	}
-
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, u.String(), nil)
-	if err != nil {
-		return nil, err
-	}
-
-	resp, err := c.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("%w: %s", ErrResponseStatus, resp.Status)
-	}
-
 	w := map[string]string{}
-	err = json.NewDecoder(resp.Body).Decode(&w)
+	err := c.Get(ctx, "app/words/", q.URLValues(), &w)
 	if err != nil {
 		return nil, err
 	}

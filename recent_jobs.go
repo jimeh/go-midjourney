@@ -2,9 +2,7 @@ package midjourney
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
-	"net/http"
 	"net/url"
 	"strconv"
 	"time"
@@ -42,7 +40,7 @@ type RecentJobsQuery struct {
 	RefreshAPI  int
 }
 
-func (rjq *RecentJobsQuery) Values() url.Values {
+func (rjq *RecentJobsQuery) URLValues() url.Values {
 	v := url.Values{}
 	if rjq.Amount != 0 {
 		v.Set("amount", strconv.Itoa(rjq.Amount))
@@ -105,27 +103,7 @@ func (c *Client) RecentJobs(
 	ctx context.Context,
 	q *RecentJobsQuery,
 ) (*RecentJobs, error) {
-	u := &url.URL{
-		Path:     "app/recent-jobs/",
-		RawQuery: q.Values().Encode(),
-	}
-
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, u.String(), nil)
-	if err != nil {
-		return nil, err
-	}
-
 	now := time.Now().UTC()
-
-	resp, err := c.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("%w: %s", ErrResponseStatus, resp.Status)
-	}
 
 	rj := &RecentJobs{
 		Query: *q,
@@ -133,7 +111,7 @@ func (c *Client) RecentJobs(
 		Page:  q.Page,
 	}
 
-	err = json.NewDecoder(resp.Body).Decode(&rj.Jobs)
+	err := c.Get(ctx, "app/recent-jobs", q.URLValues(), &rj.Jobs)
 	if err != nil {
 		return nil, err
 	}

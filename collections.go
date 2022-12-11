@@ -54,7 +54,7 @@ func (c *Client) Collections(
 ) ([]*Collection, error) {
 	var collections []*Collection
 
-	err := c.Get(ctx, "app/collections/", query.URLValues(), &collections)
+	err := c.API.Get(ctx, "app/collections/", query.URLValues(), &collections)
 
 	return collections, err
 }
@@ -73,7 +73,7 @@ func (c *Client) GetCollection(
 
 	// Deletion of a collection is strangely done by setting the hidden flag to
 	// true. This is a bit confusing, but it's how the API works.
-	err := c.Get(ctx, "app/collections/", q.URLValues(), &cols)
+	err := c.API.Get(ctx, "app/collections/", q.URLValues(), &cols)
 
 	if len(cols) == 0 {
 		return nil, fmt.Errorf("%w: id=%s", ErrCollectionNotFound, collectionID)
@@ -88,7 +88,7 @@ func (c *Client) PutCollection(
 ) (*Collection, error) {
 	var col *Collection
 
-	err := c.Put(ctx, "app/collections/", nil, collection, col)
+	err := c.API.Put(ctx, "app/collections/", nil, collection, col)
 
 	return col, err
 }
@@ -105,7 +105,7 @@ func (c *Client) DeleteCollection(
 
 	// Deletion of a collection is strangely done by setting the hidden flag to
 	// true. This is a bit confusing, but it's how the API works.
-	err := c.Put(
+	err := c.API.Put(
 		ctx, "app/collections/", nil,
 		&Collection{ID: collectionID, Hidden: true}, col,
 	)

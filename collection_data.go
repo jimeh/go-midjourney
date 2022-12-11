@@ -28,7 +28,7 @@ func (c *Client) PutCollectionData(
 	}
 	resp := &Collection{}
 
-	err := c.Put(ctx, "app/collections/", nil, req, resp)
+	err := c.API.Put(ctx, "app/collections/", nil, req, resp)
 
 	return resp, err
 }
@@ -50,7 +50,7 @@ func (c *Client) PutCollectionFilters(
 	}
 	resp := &Collection{}
 
-	err := c.Put(ctx, "app/collections/", nil, req, resp)
+	err := c.API.Put(ctx, "app/collections/", nil, req, resp)
 
 	return resp, err
 }

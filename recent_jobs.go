@@ -119,7 +119,7 @@ func (c *Client) RecentJobs(
 		Page:  q.Page,
 	}
 
-	err := c.Get(ctx, "app/recent-jobs", q.URLValues(), &rj.Jobs)
+	err := c.API.Get(ctx, "app/recent-jobs", q.URLValues(), &rj.Jobs)
 	if err != nil {
 		return nil, err
 	}

@@ -61,7 +61,7 @@ func randInt(max int) int {
 
 func (c *Client) Words(ctx context.Context, q *WordsQuery) ([]*Word, error) {
 	w := map[string]string{}
-	err := c.Get(ctx, "app/words/", q.URLValues(), &w)
+	err := c.API.Get(ctx, "app/words/", q.URLValues(), &w)
 	if err != nil {
 		return nil, err
 	}

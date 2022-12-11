@@ -50,7 +50,7 @@ func (c *Client) collectionJobs(
 
 	var resp *CollectionJobsResult
 
-	err := c.Request(
+	err := c.API.Request(
 		ctx, method, "app/collections-jobs/", nil,
 		&collectionJobsRequest{CollectionID: collectionID, JobIDs: jobIDs},
 		resp,

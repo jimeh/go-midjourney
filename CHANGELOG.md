@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.1.0](https://github.com/jimeh/go-midjourney/compare/v0.0.1...v0.1.0) (2022-12-11)
+
+
+### ⚠ BREAKING CHANGES
+
+* **client:** All API request related moved from Client to APIClient type.
+
+### Features
+
+* **client:** simplify Client by extracting API methods to APIClient ([e6b9af3](https://github.com/jimeh/go-midjourney/commit/e6b9af36de56179fce3fa2919b6ec857857a9510))
+* **job:** add ThumbnailURL method ([b8d80c9](https://github.com/jimeh/go-midjourney/commit/b8d80c9254ccf42b192288d2e87a64afdb57ed7f))
+
 ## 0.0.1 (2022-12-11)
 
 
